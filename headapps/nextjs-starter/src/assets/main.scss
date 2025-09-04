@@ -2,3 +2,259 @@
 @import "bootstrap/scss/bootstrap";
 @import "sass/main.scss";
 @import "basic/main.scss";
+
+
+// events-theme.scss
+
+// ---------------- Tokens ----------------
+$primary: #0d6efd;
+$accent: #ff6b6b;
+$ink: #212529;
+$muted: #6c757d;
+$canvas: #f4f6f9;
+$card-radius: 0.75rem;
+$elev-1: 0 8px 20px rgba(0, 0, 0, 0.08);
+$elev-2: 0 12px 28px rgba(0, 0, 0, 0.14);
+
+/* Header Navigation Styling */
+#header {
+  background-color: #f8f9fa;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #eaeaea;
+
+  .navigation-main {
+    nav {
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          position: relative;
+          display: inline-block;
+          margin-right: 2rem;
+
+          .navigation-title {
+            a {
+              text-decoration: none;
+              color: #333;
+              font-weight: 600;
+              padding: 0.5rem 0;
+              display: inline-flex;
+              align-items: center;
+
+              /* Custom arrow */
+              &::after {
+                content: "▼";
+                font-size: 0.65rem;
+                margin-left: 10px; // spacing between title & arrow
+                transition: transform 0.2s ease-in-out;
+              }
+
+              &:hover {
+                color: #007bff;
+              }
+            }
+          }
+
+          /* Remove SXA default arrow */
+          &.submenu > .navigation-title::after {
+            content: none !important;
+          }
+
+          /* Dropdown menu */
+          ul {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: #fff;
+            min-width: 180px;
+            padding: 0.5rem 0;
+            margin: 0;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+            li {
+              display: block;
+              margin: 0;
+
+              .navigation-title a {
+                display: block;
+                padding: 0.5rem 1rem;
+                color: #333;
+                font-weight: 400;
+
+                &:hover {
+                  background: #f1f1f1;
+                  color: #007bff;
+                }
+              }
+            }
+          }
+
+          /* Show dropdown on hover */
+          &:hover > ul {
+            display: block;
+          }
+
+          /* Rotate arrow on hover */
+          &:hover > .navigation-title a::after {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+  }
+}
+
+
+/* Remove default SXA submenu arrows */
+#header .navigation-main li.submenu > .navigation-title::after,
+#header .navigation-main li.level1.submenu > .navigation-title::after {
+  content: none !important; /* hides SXA’s default arrow */
+}
+
+// ---------------- Column Splitter Layout ----------------
+#content {
+  .row.component.column-splitter {
+    background:
+      radial-gradient(1200px 400px at 10% -10%, rgba($primary, 0.08), transparent 60%),
+      radial-gradient(1200px 400px at 90% -10%, rgba($accent, 0.08), transparent 60%),
+      $canvas;
+    border-radius: 1rem;
+    margin-block: 2rem;
+    padding-block: 2.5rem;
+
+    .col-6.col-lg-4 {
+      display: grid; // equal-height cards
+    }
+
+    .component.featured-event {
+      height: 100%;
+
+      .card {
+        height: 100%;
+        border: 0;
+        border-radius: $card-radius;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: $elev-1;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        position: relative;
+
+        &:hover {
+          transform: translateY(-6px);
+          box-shadow: $elev-2;
+        }
+
+        > img,
+        .img-fluid {
+          display: block;
+          width: 100%;
+          aspect-ratio: 16 / 10;
+          object-fit: cover;
+        }
+
+        &::before {
+          content: "";
+          position: absolute;
+          inset: 0 0 auto 0;
+          height: 40%;
+          pointer-events: none;
+          background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), transparent);
+          mix-blend-mode: multiply;
+        }
+
+        .card-body {
+          padding: 1.25rem 1.25rem 1.5rem;
+
+          .card-title {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: $primary;
+            letter-spacing: 0.01em;
+          }
+
+          .card-text {
+            color: $muted;
+            line-height: 1.55;
+            margin-bottom: 1rem;
+          }
+
+          a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.55rem 1rem;
+            border-radius: 999px;
+            background: $accent;
+            color: #fff;
+            box-shadow: 0 6px 16px rgba($accent, 0.35);
+            transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+
+            &::after {
+              content: "→";
+              transform: translateX(0);
+              transition: transform 0.15s ease;
+            }
+
+            &:hover {
+              transform: translateY(-1px);
+              background: darken($accent, 7%);
+              box-shadow: 0 10px 22px rgba($accent, 0.45);
+
+              &::after {
+                transform: translateX(2px);
+              }
+            }
+
+            &:focus-visible {
+              outline: 3px solid rgba($primary, 0.35);
+              outline-offset: 2px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// ---------------- Accessibility / Motion ----------------
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+// ---------------- Dark Mode ----------------
+@media (prefers-color-scheme: dark) {
+  #content {
+    .row.component.column-splitter {
+      background:
+        radial-gradient(1200px 400px at 10% -10%, rgba($primary, 0.15), transparent 60%),
+        radial-gradient(1200px 400px at 90% -10%, rgba($accent, 0.15), transparent 60%),
+        #0f1115;
+    }
+
+    .component.featured-event {
+      .card {
+        background: #141820;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+
+        .card-title {
+          color: lighten($primary, 10%);
+        }
+
+        .card-text {
+          color: lighten($muted, 18%);
+        }
+      }
+    }
+  }
+}
+
